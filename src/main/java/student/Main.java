@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import student.adventure.Adventure;
 
 public class Main {
+
     public static void main(String[] args) {
         // TODO: Complete this method.
         /*
@@ -15,5 +16,6 @@ public class Main {
         3. JSON function for custom map
         4. Function for regular game activity
          */
+
     }
 }

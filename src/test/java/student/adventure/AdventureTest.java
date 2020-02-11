@@ -29,11 +29,11 @@ public class AdventureTest {
 
     @Test
     public void testJSONstart() {
-        assertEquals("MatthewsStreet", gameInitialization());
+        assertEquals("MatthewsStreet", adventureGame.gameInitialization());
     }
 
     public void testJSONend() {
-        assertEquals("Siebel1314", gameEnd());
+        assertEquals("Siebel1314", adventureGame.gameEnd());
     }
 
     public void testCorrectInput() {
@@ -50,7 +50,6 @@ public class AdventureTest {
         System.setOut(new PrintStream(outputStream));
 
         assertEquals(correctMessage, outputStream.toString());
-
 
     }
 }
