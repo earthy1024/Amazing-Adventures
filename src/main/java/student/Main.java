@@ -1,21 +1,38 @@
 package student;
 
-import com.fasterxml.jackson.core.JsonParser;
-
 
 import student.adventure.Adventure;
+import com.fasterxml.jackson.core.JsonParser;
+
+import java.io.IOException;
+import java.util.Scanner;
+
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO: Complete this method.
-        /*
-        Methods needed:
-        1. Function for game start
-        2. Function for user input
-        3. JSON function for custom map
-        4. Function for regular game activity
-         */
+        boolean gameActive = true;
+        Adventure adventure = new Adventure();
+        int currentRoomIndex = 0;
+
+        System.out.println("Enter json file path to use for map:");
+        Scanner scanner = new Scanner(System.in);
+        String inputFile = scanner.nextLine();
+        adventure.gameInitialization(inputFile);
+
+
+        while(gameActive) {
+            adventure.getCurrentLocation(currentRoomIndex);
+            if (currentRoomIndex == 0) {
+                System.out.println("Your journey begins here");
+            }
+            adventure.getCurrentInstructions(currentRoomIndex);
+            String userDirection = scanner.next();
+            adventure.updateLocation(userDirection, currentRoomIndex);
+        }
+
+
 
     }
 }

@@ -32,9 +32,6 @@ public class AdventureTest {
         assertEquals("MatthewsStreet", adventureGame.gameInitialization());
     }
 
-    public void testJSONend() {
-        assertEquals("Siebel1314", adventureGame.gameEnd());
-    }
 
     public void testCorrectInput() {
         String testInput = "East\nNorth\nSouth\nExit";
