@@ -28,8 +28,18 @@ public class Main {
                 System.out.println("Your journey begins here");
             }
             adventure.getCurrentInstructions(currentRoomIndex);
-            String userDirection = scanner.next();
+            String userDirection = scanner.nextLine();
+            if (userDirection.toUpperCase().equals("EXIT") || userDirection.toUpperCase().equals("QUIT")) {
+                System.exit(0);
+                gameActive = false;
+                break;
+            }
+            int tempIndex = currentRoomIndex;
             currentRoomIndex = adventure.updateLocation(userDirection, currentRoomIndex);
+            if (currentRoomIndex == -1) {
+                adventure.errorMessage(userDirection);
+                currentRoomIndex = tempIndex;
+            }
         }
 
 

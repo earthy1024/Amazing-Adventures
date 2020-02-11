@@ -25,19 +25,20 @@ Directions directions;
 
     public void gameInitialization(String path) throws IOException {
         file = new File(path);
-        Layout layout = new ObjectMapper().readValue(file, Layout.class);
+        layout = new ObjectMapper().readValue(file, Layout.class);
     }
 
     public void errorMessage(String input) {
-        System.out.println("I can't go to" + input);
+        System.out.println("I can't go to " + input);
     }
 
     public void getCurrentLocation(int index) {
-        System.out.println("You are in the" + layout.getRooms().get(index) + "");
+        System.out.println(layout.getRooms().get(index).getDescription());
     }
 
     public void getCurrentInstructions(int index) {
         System.out.print("From here, you can go: ");
+
         for (int a = 0; a < layout.getRooms().get(index).getDirections().size(); a++) {
             System.out.print(layout.getRooms().get(index).getDirections().get(a).getDirectionName() + " ");
         }
@@ -45,17 +46,20 @@ Directions directions;
 
     public int updateLocation(String input, int givenIndex) throws IOException {
         String nextRoom = "";
+
         for (int a = 0; a < layout.getRooms().get(givenIndex).getDirections().size(); a++) {
             if (input.equals(layout.getRooms().get(givenIndex).getDirections().get(a).getDirectionName())) {
                 nextRoom = layout.getRooms().get(givenIndex).getDirections().get(a).getRoom();
             }
         }
+
         for (int b = 0; b < layout.getRooms().size(); b++) {
-            if (nextRoom.equals(layout.getRooms().get(b))) {
+            if (nextRoom.equals(layout.getRooms().get(b).getName())) {
                 return b;
             }
         }
-        return givenIndex;
+
+        return -1;
     }
 
 

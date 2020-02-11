@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 
 public class AdventureTest {
@@ -28,16 +29,15 @@ public class AdventureTest {
     }
 
     @Test
-    public void testJSONstart() {
-        assertEquals("MatthewsStreet", adventureGame.gameInitialization());
-    }
 
 
-    public void testCorrectInput() {
+    public void testCorrectInput() throws IOException {
         String testInput = "East\nNorth\nSouth\nExit";
+
         ByteArrayInputStream inputStream = new ByteArrayInputStream(testInput.getBytes());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        adventureGame.gameInitialization();
+        adventureGame.gameInitialization("src/main/resources/AdventureMap");
+
         String correctMessage = "You are on Matthews, outside the Siebel Center\n" +
                 "Your journey begins here\n" +
                 "From here, you can go: East\nYou are in the west entry of Siebel Center. You can see the elevator, the ACM office, and hallways to the north and east.\n" +
