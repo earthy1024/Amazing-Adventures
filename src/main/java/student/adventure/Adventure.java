@@ -8,6 +8,7 @@ package student.adventure;
 */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import student.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,15 +35,27 @@ Directions directions;
     public void getCurrentLocation(int index) {
         System.out.println("You are in the" + layout.getRooms().get(index) + "");
     }
+
     public void getCurrentInstructions(int index) {
         System.out.print("From here, you can go: ");
         for (int a = 0; a < layout.getRooms().get(index).getDirections().size(); a++) {
-            System.out.print(layout.getRooms().get(index).getDirections().get(a) + " ");
+            System.out.print(layout.getRooms().get(index).getDirections().get(a).getDirectionName() + " ");
         }
     }
 
-    public void updateLocation(String input, int givenIndex) {
-        
+    public int updateLocation(String input, int givenIndex) throws IOException {
+        String nextRoom = "";
+        for (int a = 0; a < layout.getRooms().get(givenIndex).getDirections().size(); a++) {
+            if (input.equals(layout.getRooms().get(givenIndex).getDirections().get(a).getDirectionName())) {
+                nextRoom = layout.getRooms().get(givenIndex).getDirections().get(a).getRoom();
+            }
+        }
+        for (int b = 0; b < layout.getRooms().size(); b++) {
+            if (nextRoom.equals(layout.getRooms().get(b))) {
+                return b;
+            }
+        }
+        return givenIndex;
     }
 
 

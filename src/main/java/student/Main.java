@@ -29,7 +29,7 @@ public class Main {
             }
             adventure.getCurrentInstructions(currentRoomIndex);
             String userDirection = scanner.next();
-            adventure.updateLocation(userDirection, currentRoomIndex);
+            currentRoomIndex = adventure.updateLocation(userDirection, currentRoomIndex);
         }
 
 
