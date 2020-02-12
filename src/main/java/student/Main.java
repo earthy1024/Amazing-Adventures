@@ -57,10 +57,6 @@ public class Main {
                 adventure.errorMessage(userDirection);
                 currentRoomIndex = tempIndex;
             }
-
         }
-
-
-
     }
 }
