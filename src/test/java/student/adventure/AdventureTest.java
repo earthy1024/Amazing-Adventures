@@ -31,7 +31,7 @@ public class AdventureTest {
     @Test
 
 
-    public void testCorrectInput() throws IOException {
+    public void testCorrectInput() throws Exception {
         String testInput = "East\nNorth\nSouth\nExit";
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(testInput.getBytes());

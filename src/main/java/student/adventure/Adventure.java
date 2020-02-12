@@ -25,6 +25,9 @@ Directions directions;
 
     public void gameInitialization(String path) throws IOException {
         file = new File(path);
+        if (!file.exists()) {
+            throw new IOException();
+        }
         layout = new ObjectMapper().readValue(file, Layout.class);
     }
 
@@ -42,6 +45,14 @@ Directions directions;
         for (int a = 0; a < layout.getRooms().get(index).getDirections().size(); a++) {
             System.out.print(layout.getRooms().get(index).getDirections().get(a).getDirectionName() + " ");
         }
+    }
+
+    public String getCurrentRoom(int index) {
+        return layout.getRooms().get(index).getName();
+    }
+
+    public String getEndRoom() {
+        return layout.getEndingRoom();
     }
 
     public int updateLocation(String input, int givenIndex) throws IOException {
@@ -63,7 +74,4 @@ Directions directions;
     }
 
 
-    public void userInput() {
-
-    }
 }

@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         // TODO: Complete this method.
         boolean gameActive = true;
         Adventure adventure = new Adventure();
@@ -24,6 +24,10 @@ public class Main {
 
         while(gameActive) {
             adventure.getCurrentLocation(currentRoomIndex);
+            if (adventure.getCurrentRoom(currentRoomIndex).equals(adventure.getEndRoom())) {
+                System.out.println("You have reached the end room");
+                System.exit(0);
+            }
             if (currentRoomIndex == 0) {
                 System.out.println("Your journey begins here");
             }
@@ -40,6 +44,7 @@ public class Main {
                 adventure.errorMessage(userDirection);
                 currentRoomIndex = tempIndex;
             }
+
         }
 
 
