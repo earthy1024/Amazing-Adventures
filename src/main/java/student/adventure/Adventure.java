@@ -23,6 +23,9 @@ Directions directions;
 
     }
 
+    /*
+    This creates a new file instance based on the path given by the user
+     */
     public void gameInitialization(String path) throws IOException {
         file = new File(path);
         if (!file.exists()) {
@@ -39,6 +42,9 @@ Directions directions;
         System.out.println(layout.getRooms().get(index).getDescription());
     }
 
+    /*
+    This function will take in the index of the current room and give out the directions linked to the room
+     */
     public void getCurrentInstructions(int index) {
         System.out.print("From here, you can go: ");
 
@@ -55,6 +61,12 @@ Directions directions;
         return layout.getEndingRoom();
     }
 
+    /*
+    This function takes in the direction choice given by the user and the current room index
+    This checks whether the direction is valid based on the directions linked to the room object
+    If it is valid the room index of the updated room will be returned
+    If the direction is invalid then -1 is returned
+     */
     public int updateLocation(String input, int givenIndex) throws IOException {
         String nextRoom = "";
 
@@ -71,6 +83,10 @@ Directions directions;
         }
 
         return -1;
+    }
+
+    public String getRoomName(int index) {
+        return layout.getRooms().get(index).getName();
     }
 
 
