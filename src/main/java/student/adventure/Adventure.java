@@ -1,14 +1,5 @@
 package student.adventure;
-/*
-        Methods needed:
-        1. Function for game start
-        2. Function for user input
-        3. JSON function for custom map
-        4. Function for regular game activity
-*/
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import student.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +40,12 @@ public class Adventure {
         System.out.println("Enter json file path to use for map:");
         Scanner scanner = new Scanner(System.in);
         String inputFile = scanner.nextLine();
+        try {
+            adventure.gameInitialization(inputFile);
+        } catch (IOException e) {
+            System.out.println("Not a valid file path");
+            executeGame(adventure);
+        }
         adventure.gameInitialization(inputFile);
 
         while(gameActive) {
@@ -83,8 +80,8 @@ public class Adventure {
     public void getCurrentInstructions(int index) {
         System.out.print("From here, you can go: ");
         List<Directions> currentDirectionsList = layout.getRooms().get(index).getDirections();
-        for (int a = 0; a < currentDirectionsList.size(); a++) {
-            System.out.print(currentDirectionsList.get(a).getDirectionName() + " ");
+        for (Directions direction : currentDirectionsList) {
+            System.out.print(direction.getDirectionName() + " ");
         }
         System.out.println();
     }
@@ -100,22 +97,22 @@ public class Adventure {
         String nextRoom = "";
         input = input.toUpperCase();
         List<Directions> currentDirectionsList = layout.getRooms().get(givenIndex).getDirections();
-        for (int a = 0; a < currentDirectionsList.size(); a++) {
-            if (input.equals(currentDirectionsList.get(a).getDirectionName().toUpperCase())) {
-                nextRoom = currentDirectionsList.get(a).getRoom();
+        for (Directions directions : currentDirectionsList) {
+            if (input.equals(directions.getDirectionName().toUpperCase())) {
+                nextRoom = directions.getRoom();
             }
         }
 
-        for (int b = 0; b < layout.getRooms().size(); b++) {
-            if (nextRoom.equals(layout.getRooms().get(b).getName())) {
-                return b;
+        for (int roomNum = 0; roomNum < layout.getRooms().size(); roomNum++) {
+            if (nextRoom.equals(layout.getRooms().get(roomNum).getName())) {
+                return roomNum;
             }
         }
         return -1;
     }
 
     public String trimUserInput(String input) {
-        if (input.toUpperCase().contains("GO")) {
+        if (input.toUpperCase().contains("GO ")) {
             input = input.substring(3);
         }
         return input;
