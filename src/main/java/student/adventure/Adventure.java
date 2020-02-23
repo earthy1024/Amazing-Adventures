@@ -46,44 +46,67 @@ public class Adventure {
             System.out.println("Not a valid file path");
             executeGame(adventure);
         }
+
         adventure.gameInitialization(inputFile);
 
+        if (currentRoomIndex == 0) {
+            System.out.println("Your journey begins here");
+        }
         while(gameActive) {
-            adventure.getCurrentLocation(currentRoomIndex);
+            // adventure.getCurrentLocation(currentRoomIndex);
+
+
+            // examine(currentRoomIndex, adventure);
+
             if (adventure.getCurrentRoom(currentRoomIndex).equals(adventure.getEndRoom())) {
-                System.out.println("You have reached the end room");
+                examine(currentRoomIndex, adventure);
+                System.out.println("You have reached the end room!");
                 System.exit(0);
             }
-            if (currentRoomIndex == 0) {
-                System.out.println("Your journey begins here");
-            }
-            adventure.getCurrentInstructions(currentRoomIndex);
-            String userDirection = scanner.nextLine();
-            if (userDirection.toUpperCase().equals("EXIT") || userDirection.toUpperCase().equals("QUIT")) {
+
+            /**
+            String userInstruction = scanner.nextLine();
+            if (userInstruction.toUpperCase().equals("EXIT") || userInstruction.toUpperCase().equals("QUIT")) {
                 System.exit(0);
                 break;
             }
-            userDirection = trimUserInput(userDirection);
+
+            userInstruction = trimInputToDirection(userInstruction);
             int tempIndex = currentRoomIndex;
-            currentRoomIndex = adventure.updateLocation(userDirection, currentRoomIndex);
+            currentRoomIndex = adventure.updateLocation(userInstruction, currentRoomIndex);
             if (currentRoomIndex == -1) {
-                adventure.errorMessage(userDirection);
+                adventure.errorMessage(userInstruction);
                 currentRoomIndex = tempIndex;
             }
-        }
-    }
+             */
+            // String userInstruction = scanner.nextLine();
+            examine(currentRoomIndex, adventure);
+            while (true) {
+                String userInstruction = scanner.nextLine();
+                userInstruction = trimInputToDirection(userInstruction);
+                if (userInstruction.toUpperCase().equals("EXIT") || userInstruction.toUpperCase().equals("QUIT")) {
+                    System.exit(0);
+                } else if (updateLocation(userInstruction, currentRoomIndex) == -1) {
+                    if (userInstruction.toUpperCase().contains("ADD")) {
+                        adventure.addItem(userInstruction.substring(4), currentRoomIndex);
+                    } else if (userInstruction.toUpperCase().equals("EXAMINE")) {
+                        examine(currentRoomIndex, adventure);
+                    } else {
+                        adventure.errorMessage(userInstruction);
+                    }
+                } else {
+                    int tempIndex = currentRoomIndex;
+                    currentRoomIndex = adventure.updateLocation(userInstruction, currentRoomIndex);
+                    if (currentRoomIndex == -1) {
+                        adventure.errorMessage(userInstruction);
+                        currentRoomIndex = tempIndex;
+                    }
+                    break;
+                }
 
-    /**
-     * This function will take in the index of the current room and give out the directions linked to the room
-     * @param index of the current room
-     */
-    public void getCurrentInstructions(int index) {
-        System.out.print("From here, you can go: ");
-        List<Directions> currentDirectionsList = layout.getRooms().get(index).getDirections();
-        for (Directions direction : currentDirectionsList) {
-            System.out.print(direction.getDirectionName() + " ");
+            }
+
         }
-        System.out.println();
     }
 
     /**
@@ -111,7 +134,35 @@ public class Adventure {
         return -1;
     }
 
-    public String trimUserInput(String input) {
+    public void getCurrentItems(int index) {
+        System.out.print("Items visible: ");
+        List<String> currentItems = layout.getRooms().get(index).getItems();
+        for (int item = 0; item < currentItems.size(); item++) {
+            System.out.print(currentItems.get(item) + ", ");
+        }
+        System.out.println();
+    }
+
+    /**
+     * This function will take in the index of the current room and give out the directions linked to the room
+     * @param index of the current room
+     */
+    public void getCurrentInstructions(int index) {
+        System.out.print("From here, you can go: ");
+        List<Directions> currentDirectionsList = layout.getRooms().get(index).getDirections();
+        for (Directions direction : currentDirectionsList) {
+            System.out.print(direction.getDirectionName() + " ");
+        }
+        System.out.println();
+    }
+
+    public void examine(int index, Adventure adventure) {
+        adventure.getCurrentLocation(index);
+        adventure.getCurrentInstructions(index);
+        adventure.getCurrentItems(index);
+    }
+
+    public String trimInputToDirection(String input) {
         if (input.toUpperCase().contains("GO ")) {
             input = input.substring(3);
         }
@@ -136,6 +187,10 @@ public class Adventure {
 
     public String getEndRoom() {
         return layout.getEndingRoom();
+    }
+
+    public void addItem(String item, int index) {
+        layout.getRooms().get(index).getItems().add(item);
     }
 
 }
