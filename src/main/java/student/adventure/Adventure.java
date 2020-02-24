@@ -48,40 +48,22 @@ public class Adventure {
         }
 
         adventure.gameInitialization(inputFile);
+        System.out.println("Your journey begins here");
 
-        if (currentRoomIndex == 0) {
-            System.out.println("Your journey begins here");
-        }
         while(gameActive) {
             // adventure.getCurrentLocation(currentRoomIndex);
-
-
             // examine(currentRoomIndex, adventure);
-
-            if (adventure.getCurrentRoom(currentRoomIndex).equals(adventure.getEndRoom())) {
-                examine(currentRoomIndex, adventure);
-                System.out.println("You have reached the end room!");
-                System.exit(0);
-            }
-
-            /**
-            String userInstruction = scanner.nextLine();
-            if (userInstruction.toUpperCase().equals("EXIT") || userInstruction.toUpperCase().equals("QUIT")) {
-                System.exit(0);
-                break;
-            }
-
-            userInstruction = trimInputToDirection(userInstruction);
-            int tempIndex = currentRoomIndex;
-            currentRoomIndex = adventure.updateLocation(userInstruction, currentRoomIndex);
-            if (currentRoomIndex == -1) {
-                adventure.errorMessage(userInstruction);
-                currentRoomIndex = tempIndex;
-            }
-             */
             // String userInstruction = scanner.nextLine();
+
+
+
             examine(currentRoomIndex, adventure);
             while (true) {
+                if (adventure.getCurrentRoom(currentRoomIndex).equals(adventure.getEndRoom())) {
+                    examine(currentRoomIndex, adventure);
+                    System.out.println("You have reached the end room!");
+                    System.exit(0);
+                }
                 String userInstruction = scanner.nextLine();
                 userInstruction = trimInputToDirection(userInstruction);
                 if (userInstruction.toUpperCase().equals("EXIT") || userInstruction.toUpperCase().equals("QUIT")) {
@@ -135,6 +117,9 @@ public class Adventure {
     }
 
     public void getCurrentItems(int index) {
+        if (layout.getRooms().get(index).getItems() == null) {
+            return;
+        }
         System.out.print("Items visible: ");
         List<String> currentItems = layout.getRooms().get(index).getItems();
         for (int item = 0; item < currentItems.size(); item++) {
@@ -190,6 +175,13 @@ public class Adventure {
     }
 
     public void addItem(String item, int index) {
+        List<String> items = layout.getRooms().get(index).getItems();
+        for (int current = 0; current < items.size(); current++) {
+            if (items.get(index).equals(item)) {
+                System.out.println("This item is already in the room");
+                return;
+            }
+        }
         layout.getRooms().get(index).getItems().add(item);
     }
 
