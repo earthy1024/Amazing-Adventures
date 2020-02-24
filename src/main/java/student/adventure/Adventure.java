@@ -1,8 +1,14 @@
 package student.adventure;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.internal.util.xml.impl.Input;
+import org.glassfish.grizzly.http.HttpPacket;
+import sun.misc.IOUtils;
+import sun.net.www.URLConnection;
+import sun.net.www.protocol.http.HttpURLConnection;
+import sun.nio.ch.IOUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -34,6 +40,7 @@ public class Adventure {
      * @throws IOException
      */
     public void executeGame(Adventure adventure) throws IOException {
+
         boolean gameActive = true;
         int currentRoomIndex = 0;
 
@@ -60,6 +67,7 @@ public class Adventure {
             examine(currentRoomIndex, adventure);
             while (true) {
                 String userInstruction = scanner.nextLine();
+
                 userInstruction = trimInputToDirection(userInstruction);
                 if (userInstruction.toUpperCase().equals("EXIT") || userInstruction.toUpperCase().equals("QUIT")) {
                     System.exit(0);
@@ -68,6 +76,8 @@ public class Adventure {
                         adventure.addItem(userInstruction.substring(4), currentRoomIndex);
                     } else if (userInstruction.toUpperCase().equals("EXAMINE")) {
                         examine(currentRoomIndex, adventure);
+                    } else if (userInstruction.toUpperCase().contains("REMOVE")) {
+                        adventure.removeItem(userInstruction.substring(7), currentRoomIndex);
                     } else {
                         adventure.getErrorMessage(userInstruction);
                     }
@@ -111,6 +121,10 @@ public class Adventure {
         return -1;
     }
 
+    /**
+     * Gets the list of items in the current room of the user
+     * @param index of the current room
+     */
     private void getCurrentItems(int index) {
         if (layout.getRooms().get(index).getItems() == null) {
             return;
@@ -172,7 +186,7 @@ public class Adventure {
     private void addItem(String item, int index) {
         List<String> items = layout.getRooms().get(index).getItems();
         for (int current = 0; current < items.size(); current++) {
-            if (items.get(index).equals(item)) {
+            if (items.get(current).equals(item)) {
                 System.out.println("This item is already in the room");
                 return;
             }
@@ -180,4 +194,31 @@ public class Adventure {
         layout.getRooms().get(index).getItems().add(item);
     }
 
+    private void removeItem(String item, int index) {
+        List<String> items = layout.getRooms().get(index).getItems();
+        for (int current = 0; current < items.size(); current++) {
+            if (items.get(current).equals(item)) {
+                items.remove(current);
+            }
+        }
+    }
+    /*
+    URL connection = new URL("http://www.purgomalum.com/service/containsprofanity?text=covfefe"
+                        + userInstruction);
+                HttpURLConnection languageCheck = (HttpURLConnection) connection.openConnection();
+                languageCheck.setDoOutput(true);
+                OutputStreamWriter out = new OutputStreamWriter(languageCheck.getOutputStream());
+                out.close();
+                // BufferedReader in = new BufferedReader(new InputStreamReader(languageCheck.getInputStream()));
+
+                InputStream in = new URL("http://www.purgomalum.com/service/containsprofanity?text=covfefe"
+                        + userInstruction).openStream();
+                String profanityTest = toString(in);
+                if (profanityTest.equals("true")) {
+                    System.out.println("Instruction contains profanity, try again");
+                    // in.close();
+                    continue;
+                }
+                // in.close();
+     */
 }
