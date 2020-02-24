@@ -50,20 +50,15 @@ public class Adventure {
         adventure.gameInitialization(inputFile);
         System.out.println("Your journey begins here");
 
+
         while(gameActive) {
-            // adventure.getCurrentLocation(currentRoomIndex);
-            // examine(currentRoomIndex, adventure);
-            // String userInstruction = scanner.nextLine();
-
-
-
+            if (adventure.getCurrentRoom(currentRoomIndex).equals(adventure.getEndRoom())) {
+                adventure.getCurrentLocation(currentRoomIndex);
+                System.out.println("You have reached the end room!");
+                System.exit(0);
+            }
             examine(currentRoomIndex, adventure);
             while (true) {
-                if (adventure.getCurrentRoom(currentRoomIndex).equals(adventure.getEndRoom())) {
-                    examine(currentRoomIndex, adventure);
-                    System.out.println("You have reached the end room!");
-                    System.exit(0);
-                }
                 String userInstruction = scanner.nextLine();
                 userInstruction = trimInputToDirection(userInstruction);
                 if (userInstruction.toUpperCase().equals("EXIT") || userInstruction.toUpperCase().equals("QUIT")) {
@@ -74,19 +69,19 @@ public class Adventure {
                     } else if (userInstruction.toUpperCase().equals("EXAMINE")) {
                         examine(currentRoomIndex, adventure);
                     } else {
-                        adventure.errorMessage(userInstruction);
+                        adventure.getErrorMessage(userInstruction);
                     }
                 } else {
                     int tempIndex = currentRoomIndex;
                     currentRoomIndex = adventure.updateLocation(userInstruction, currentRoomIndex);
                     if (currentRoomIndex == -1) {
-                        adventure.errorMessage(userInstruction);
+                        adventure.getErrorMessage(userInstruction);
                         currentRoomIndex = tempIndex;
                     }
                     break;
                 }
-
             }
+
 
         }
     }
@@ -98,7 +93,7 @@ public class Adventure {
      * @return the index of the room the user is lead to based on the direction chosen
      * @throws IOException
      */
-    public int updateLocation(String input, int givenIndex) throws IOException {
+    private int updateLocation(String input, int givenIndex) throws IOException {
         String nextRoom = "";
         input = input.toUpperCase();
         List<Directions> currentDirectionsList = layout.getRooms().get(givenIndex).getDirections();
@@ -116,14 +111,14 @@ public class Adventure {
         return -1;
     }
 
-    public void getCurrentItems(int index) {
+    private void getCurrentItems(int index) {
         if (layout.getRooms().get(index).getItems() == null) {
             return;
         }
         System.out.print("Items visible: ");
         List<String> currentItems = layout.getRooms().get(index).getItems();
-        for (int item = 0; item < currentItems.size(); item++) {
-            System.out.print(currentItems.get(item) + ", ");
+        for (String currentItem : currentItems) {
+            System.out.print(currentItem + ", ");
         }
         System.out.println();
     }
@@ -132,7 +127,7 @@ public class Adventure {
      * This function will take in the index of the current room and give out the directions linked to the room
      * @param index of the current room
      */
-    public void getCurrentInstructions(int index) {
+    private void getCurrentInstructions(int index) {
         System.out.print("From here, you can go: ");
         List<Directions> currentDirectionsList = layout.getRooms().get(index).getDirections();
         for (Directions direction : currentDirectionsList) {
@@ -147,34 +142,34 @@ public class Adventure {
         adventure.getCurrentItems(index);
     }
 
-    public String trimInputToDirection(String input) {
+    private String trimInputToDirection(String input) {
         if (input.toUpperCase().contains("GO ")) {
             input = input.substring(3);
         }
         return input;
     }
 
-    public void errorMessage(String input) {
+    private void getErrorMessage(String input) {
         System.out.println("I can't go to " + input);
     }
 
-    public void getCurrentLocation(int index) {
+    private void getCurrentLocation(int index) {
         System.out.println(layout.getRooms().get(index).getDescription());
     }
 
-    public String getRoomName(int index) {
+    private String getRoomName(int index) {
         return layout.getRooms().get(index).getName();
     }
 
-    public String getCurrentRoom(int index) {
+    private String getCurrentRoom(int index) {
         return layout.getRooms().get(index).getName();
     }
 
-    public String getEndRoom() {
+    private String getEndRoom() {
         return layout.getEndingRoom();
     }
 
-    public void addItem(String item, int index) {
+    private void addItem(String item, int index) {
         List<String> items = layout.getRooms().get(index).getItems();
         for (int current = 0; current < items.size(); current++) {
             if (items.get(index).equals(item)) {
