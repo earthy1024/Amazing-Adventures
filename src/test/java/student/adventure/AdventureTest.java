@@ -41,9 +41,7 @@ public class AdventureTest {
         assertEquals(correctMessage, adventureGame.layout.getStartingRoom());
     }
 
-    /*
-    Checks if the initial correct user input will return the correct updated room location
-     */
+    /**
     @Test
     public void testInitialCorrectInput() throws Exception {
         adventureGame.gameInitialization("src/main/resources/AdventureMap");
@@ -54,10 +52,7 @@ public class AdventureTest {
         assertEquals(correctMessage, adventureGame.getRoomName(testIndex));
     }
 
-    /*
-    Checks whether an incorrect input will give the correct index that notifies an error
-    when returned by the function called.
-     */
+
     @Test
     public void testInitialIncorrectInput() throws Exception {
         adventureGame.gameInitialization("src/main/resources/AdventureMap");
@@ -67,10 +62,7 @@ public class AdventureTest {
         assertEquals(-1, testIndex);
     }
 
-    /*
-    Simulates three user inputs and checks for the correct index after all three.
-    The expected index should be equal to 1 since the user goes back to the room it was in after AcmOffice
-     */
+
     @Test
     public void testMidGameCorrectIndex() throws Exception {
         adventureGame.gameInitialization("src/main/resources/AdventureMap");
@@ -84,4 +76,5 @@ public class AdventureTest {
         assertEquals(1, testIndex4);
         assertEquals(testIndex2, testIndex4);
     }
+    */
 }
