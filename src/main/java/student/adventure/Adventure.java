@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Adventure {
-    File file;
-    Layout layout;
+    private File file;
+    private Layout layout;
+    private String name;
+    private int moveCount;
 
     public Adventure() {
 
@@ -32,6 +34,7 @@ public class Adventure {
             throw new IOException();
         }
         layout = new ObjectMapper().readValue(file, Layout.class);
+
     }
 
     /**
@@ -53,16 +56,17 @@ public class Adventure {
             System.out.println("Not a valid file path");
             executeGame(adventure);
         }
+        System.out.println("Name:");
+        name = scanner.nextLine();
 
         adventure.gameInitialization(inputFile);
         System.out.println("Your journey begins here");
-
 
         while(gameActive) {
             if (adventure.getCurrentRoom(currentRoomIndex).equals(adventure.getEndRoom())) {
                 adventure.getCurrentLocation(currentRoomIndex);
                 System.out.println("You have reached the end room!");
-                System.exit(0);
+                break;
             }
             examine(currentRoomIndex, adventure);
             while (true) {
@@ -70,7 +74,8 @@ public class Adventure {
 
                 userInstruction = trimInputToDirection(userInstruction);
                 if (userInstruction.toUpperCase().equals("EXIT") || userInstruction.toUpperCase().equals("QUIT")) {
-                    System.exit(0);
+                    gameActive = false;
+                    break;
                 } else if (updateLocation(userInstruction, currentRoomIndex) == -1) {
                     if (userInstruction.toUpperCase().contains("ADD")) {
                         adventure.addItem(userInstruction.substring(4), currentRoomIndex);
@@ -84,6 +89,7 @@ public class Adventure {
                 } else {
                     int tempIndex = currentRoomIndex;
                     currentRoomIndex = adventure.updateLocation(userInstruction, currentRoomIndex);
+                    moveCount++;
                     if (currentRoomIndex == -1) {
                         adventure.getErrorMessage(userInstruction);
                         currentRoomIndex = tempIndex;
@@ -91,8 +97,6 @@ public class Adventure {
                     break;
                 }
             }
-
-
         }
     }
 
@@ -150,7 +154,7 @@ public class Adventure {
         System.out.println();
     }
 
-    public void examine(int index, Adventure adventure) {
+    private void examine(int index, Adventure adventure) {
         adventure.getCurrentLocation(index);
         adventure.getCurrentInstructions(index);
         adventure.getCurrentItems(index);
@@ -195,30 +199,25 @@ public class Adventure {
     }
 
     private void removeItem(String item, int index) {
+        boolean containsItem = false;
         List<String> items = layout.getRooms().get(index).getItems();
         for (int current = 0; current < items.size(); current++) {
             if (items.get(current).equals(item)) {
                 items.remove(current);
+                containsItem = true;
             }
         }
+        if (!containsItem) {
+            System.out.println("There is no " + item + " to remove");
+        }
     }
-    /*
-    URL connection = new URL("http://www.purgomalum.com/service/containsprofanity?text=covfefe"
-                        + userInstruction);
-                HttpURLConnection languageCheck = (HttpURLConnection) connection.openConnection();
-                languageCheck.setDoOutput(true);
-                OutputStreamWriter out = new OutputStreamWriter(languageCheck.getOutputStream());
-                out.close();
-                // BufferedReader in = new BufferedReader(new InputStreamReader(languageCheck.getInputStream()));
 
-                InputStream in = new URL("http://www.purgomalum.com/service/containsprofanity?text=covfefe"
-                        + userInstruction).openStream();
-                String profanityTest = toString(in);
-                if (profanityTest.equals("true")) {
-                    System.out.println("Instruction contains profanity, try again");
-                    // in.close();
-                    continue;
-                }
-                // in.close();
-     */
+    public String getUser() {
+        return name;
+    }
+
+    public int getScore() {
+        return moveCount;
+    }
+
 }

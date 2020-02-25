@@ -3,6 +3,8 @@ package student;
 
 import student.adventure.Adventure;
 import com.fasterxml.jackson.core.JsonParser;
+import student.adventure.AdventureTournament;
+import student.adventure.Leaderboard;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -10,7 +12,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        Adventure adventure = new Adventure();
-        adventure.executeGame(adventure);
+
+        AdventureTournament adventureTournament = new AdventureTournament();
+        adventureTournament.executeTournament();
     }
 }
