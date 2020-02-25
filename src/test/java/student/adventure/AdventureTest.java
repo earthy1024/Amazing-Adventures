@@ -8,10 +8,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 
 public class AdventureTest {
     Adventure adventureGame = new Adventure();
@@ -35,10 +32,25 @@ public class AdventureTest {
         //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         // System.setOut(new PrintStream(outputStream));
         // assertEquals(correctMessage, outputStream.toString);
-
+        /*
         adventureGame.gameInitialization("src/main/resources/AdventureMap");
         String correctMessage = "MatthewsStreet";
         assertEquals(correctMessage, adventureGame.layout.getStartingRoom());
+         */
+    }
+
+    @Test
+    public void testCorrectPlay() throws Exception {
+        InputStream s = System.in;
+        ByteArrayInputStream one = new ByteArrayInputStream("go east".getBytes());
+        System.setIn(one);
+        ByteArrayInputStream two = new ByteArrayInputStream("go east".getBytes());
+        System.setIn(two);
+        ByteArrayInputStream three = new ByteArrayInputStream("go south".getBytes());
+        System.setIn(three);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+
     }
 
     /**
