@@ -129,6 +129,41 @@ public class Adventure {
     }
 
     /**
+     * Adds an item to the current room of the user and does nothing if the item already exists there
+     * @param item that the user wants to add
+     * @param index of the current room
+     */
+    private void addItem(String item, int index) {
+        List<String> items = layout.getRooms().get(index).getItems();
+        for (int current = 0; current < items.size(); current++) {
+            if (items.get(current).equals(item)) {
+                System.out.println("This item is already in the room");
+                return;
+            }
+        }
+        layout.getRooms().get(index).getItems().add(item);
+    }
+
+    /**
+     * Removes an item of the user's choosing and does nothing if it is not there
+     * @param item that the user wants removed
+     * @param index of the current room
+     */
+    private void removeItem(String item, int index) {
+        boolean containsItem = false;
+        List<String> items = layout.getRooms().get(index).getItems();
+        for (int current = 0; current < items.size(); current++) {
+            if (items.get(current).equals(item)) {
+                items.remove(current);
+                containsItem = true;
+            }
+        }
+        if (!containsItem) {
+            System.out.println("There is no " + item + " to remove");
+        }
+    }
+
+    /**
      * Gets the list of items in the current room of the user
      * @param index of the current room
      */
@@ -168,6 +203,11 @@ public class Adventure {
         adventure.getCurrentItems(index);
     }
 
+    /**
+     * Removes "go" from the user instructions
+     * @param input
+     * @return substring of input without "go"
+     */
     private String trimInputToDirection(String input) {
         if (input.toUpperCase().contains("GO ")) {
             input = input.substring(3);
@@ -193,31 +233,6 @@ public class Adventure {
 
     private String getEndRoom() {
         return layout.getEndingRoom();
-    }
-
-    private void addItem(String item, int index) {
-        List<String> items = layout.getRooms().get(index).getItems();
-        for (int current = 0; current < items.size(); current++) {
-            if (items.get(current).equals(item)) {
-                System.out.println("This item is already in the room");
-                return;
-            }
-        }
-        layout.getRooms().get(index).getItems().add(item);
-    }
-
-    private void removeItem(String item, int index) {
-        boolean containsItem = false;
-        List<String> items = layout.getRooms().get(index).getItems();
-        for (int current = 0; current < items.size(); current++) {
-            if (items.get(current).equals(item)) {
-                items.remove(current);
-                containsItem = true;
-            }
-        }
-        if (!containsItem) {
-            System.out.println("There is no " + item + " to remove");
-        }
     }
 
     public String getUser() {
