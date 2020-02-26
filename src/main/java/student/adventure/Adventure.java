@@ -20,7 +20,6 @@ public class Adventure {
     private int moveCount;
 
     public Adventure() {
-
     }
 
     /**
@@ -28,7 +27,7 @@ public class Adventure {
      * @param path the file path the user has chosen as the map
      * @throws IOException
      */
-    public void gameInitialization(String path) throws IOException {
+    public void initializeGame(String path) throws IOException {
         file = new File(path);
         if (!file.exists()) {
             throw new IOException();
@@ -38,11 +37,13 @@ public class Adventure {
     }
 
     /**
-     *
+     * Executes an instance of an adventure game and it
+     * will set up the game based on the path given by the user
      * @param adventure the instance of a new game
      * @throws IOException
      */
     public void executeGame(Adventure adventure) throws IOException {
+        // First half of the function is set up for the actual game
 
         boolean gameActive = true;
         int currentRoomIndex = 0;
@@ -51,7 +52,7 @@ public class Adventure {
         Scanner scanner = new Scanner(System.in);
         String inputFile = scanner.nextLine();
         try {
-            adventure.gameInitialization(inputFile);
+            adventure.initializeGame(inputFile);
         } catch (IOException e) {
             System.out.println("Not a valid file path");
             executeGame(adventure);
@@ -59,9 +60,10 @@ public class Adventure {
         System.out.println("Name:");
         name = scanner.nextLine();
 
-        adventure.gameInitialization(inputFile);
+        adventure.initializeGame(inputFile);
         System.out.println("Your journey begins here");
 
+        // the while loop executes the game until the end room is reached or the user quits
         while(gameActive) {
             if (adventure.getCurrentRoom(currentRoomIndex).equals(adventure.getEndRoom())) {
                 adventure.getCurrentLocation(currentRoomIndex);
@@ -71,8 +73,8 @@ public class Adventure {
             examine(currentRoomIndex, adventure);
             while (true) {
                 String userInstruction = scanner.nextLine();
-
                 userInstruction = trimInputToDirection(userInstruction);
+                // The conditionals in this block check for key instructions and executes the function linked to it
                 if (userInstruction.toUpperCase().equals("EXIT") || userInstruction.toUpperCase().equals("QUIT")) {
                     gameActive = false;
                     break;
@@ -87,6 +89,7 @@ public class Adventure {
                         adventure.getErrorMessage(userInstruction);
                     }
                 } else {
+                    // If the word "go" is in the instruction the location is updated and the total moves is increased
                     int tempIndex = currentRoomIndex;
                     currentRoomIndex = adventure.updateLocation(userInstruction, currentRoomIndex);
                     moveCount++;
@@ -154,6 +157,11 @@ public class Adventure {
         System.out.println();
     }
 
+    /**
+     * Prints the whereabouts of the user and the instructions of where to go.
+     * @param index
+     * @param adventure
+     */
     private void examine(int index, Adventure adventure) {
         adventure.getCurrentLocation(index);
         adventure.getCurrentInstructions(index);
