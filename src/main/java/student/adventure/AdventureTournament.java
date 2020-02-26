@@ -12,6 +12,11 @@ public class AdventureTournament {
 
     }
 
+    /**
+     * This executes a series of adventure games and
+     * keeps track of high scores with a list of Leaderboard instances
+     * @throws IOException
+     */
     public void executeTournament() throws IOException {
         List<Leaderboard> leaderboardList = new ArrayList<>();
         boolean tournamentCheck = true;
